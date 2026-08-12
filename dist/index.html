@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DearBobby Automation â€” Dashboard</title>
+  <title>DearBobby Automation €” Dashboard</title>
   <!-- Google Fonts for premium typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
       
       <nav class="nav-menu">
         <a href="#" class="nav-item active" data-tab="overview">
-          <span class="nav-icon">ðŸ“Š</span> Overview
+          <span class="nav-icon"></span> Overview
         </a>
         <a href="#" class="nav-item" data-tab="jobs">
           <span class="nav-icon">ðŸ’¼</span> Applied Jobs
@@ -32,7 +32,7 @@
           <span class="nav-icon">ðŸ‘¤</span> Edit Profile
         </a>
         <a href="#" class="nav-item" data-tab="resume">
-          <span class="nav-icon">ðŸ“„</span> Resume Upload
+          <span class="nav-icon"></span> Resume Upload
         </a>
       </nav>
 
@@ -45,7 +45,7 @@
           <span>Parsed Keywords:</span>
           <strong id="active-resume-keywords" style="color: var(--color-primary);">0 skills</strong>
         </div>
-        <button id="btn-logout" class="btn" style="width: 100%; padding: 8px; font-size: 12px; background-color: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); color: #f87171; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 600;">ðŸšª Logout from Naukri</button>
+        <button id="btn-logout" class="btn" style="width: 100%; padding: 8px; font-size: 12px; background-color: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); color: #f87171; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 600;"> Logout from Naukri</button>
       </div>
     </aside>
 
@@ -74,7 +74,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-header">
-              <span class="stat-icon green">âœ…</span>
+              <span class="stat-icon green">✓</span>
               <span class="stat-title">Applications Sent</span>
             </div>
             <div class="stat-value" id="stat-applied">0</div>
@@ -82,7 +82,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-header">
-              <span class="stat-icon red">âŒ</span>
+              <span class="stat-icon red">✕</span>
               <span class="stat-title">Not Matched</span>
             </div>
             <div class="stat-value" id="stat-not-matched">0</div>
@@ -122,7 +122,7 @@
             <h3>Execution Console</h3>
             <div class="console-controls" style="display: flex; gap: 10px; align-items: center;">
               <div class="freshness-select-container" style="display: flex; align-items: center; gap: 8px; background-color: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
-                <label for="dashboard-freshness" style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 0; white-space: nowrap;">ðŸ“… Postings:</label>
+                <label for="dashboard-freshness" style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 0; white-space: nowrap;"> Postings:</label>
                 <select id="dashboard-freshness" style="background: transparent; border: none; color: var(--text-main); font-size: 12px; font-weight: 600; cursor: pointer; outline: none; padding-right: 4px;">
                   <option value="anytime" style="background-color: #0d1527; color: var(--text-main);">Anytime</option>
                   <option value="1_day" style="background-color: #0d1527; color: var(--text-main);">Last 24 Hours</option>
@@ -131,8 +131,8 @@
                   <option value="30_days" style="background-color: #0d1527; color: var(--text-main);">Last Month</option>
                 </select>
               </div>
-              <button class="btn btn-success" id="btn-start">â–¶ Start Assistant</button>
-              <button class="btn btn-danger" id="btn-stop" disabled>â¹ Stop Assistant</button>
+              <button class="btn btn-success" id="btn-start">–¶ Start Assistant</button>
+              <button class="btn btn-danger" id="btn-stop" disabled>¹ Stop Assistant</button>
             </div>
           </div>
           <div class="console-body">
@@ -151,8 +151,8 @@
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <div id="status-filter-btns" style="display: flex; gap: 6px;">
                 <button class="filter-pill active" data-filter="all"    id="filter-all">All</button>
-                <button class="filter-pill"        data-filter="yes"    id="filter-applied">âœ… Applied</button>
-                <button class="filter-pill"        data-filter="no"     id="filter-not-applied">âŒ Not Applied</button>
+                <button class="filter-pill"        data-filter="yes"    id="filter-applied">✓ Applied</button>
+                <button class="filter-pill"        data-filter="no"     id="filter-not-applied">✕ Not Applied</button>
               </div>
               <input type="text" id="log-search" class="form-input search-input" placeholder="Search company or title..." style="min-width: 200px;">
             </div>
@@ -257,7 +257,7 @@
             <!-- Right Side Inputs: Settings and Screening -->
             <div class="form-column">
               <div class="panel form-panel">
-                <h4>âš™ï¸ Automation & Match Settings</h4>
+                <h4>š™ï¸ Automation & Match Settings</h4>
                 <div class="form-group row-2 align-bottom">
                   <div class="checkbox-container toggle-container">
                     <input type="checkbox" id="cfg-enabled">
@@ -282,7 +282,7 @@
               </div>
 
               <div class="panel form-panel">
-                <h4>ðŸ“ Screening Answers (Autofill Templates)</h4>
+                <h4> Screening Answers (Autofill Templates)</h4>
                 <div class="form-group">
                   <label for="qa-why">Why are you interested in this role?</label>
                   <textarea id="qa-why" class="form-input textarea-small" rows="3"></textarea>
@@ -330,7 +330,7 @@
           </div>
 
           <div class="drag-drop-zone" id="drop-zone">
-            <span class="upload-icon">ðŸ“¥</span>
+            <span class="upload-icon">¥</span>
             <p class="upload-text">Drag and drop your resume file here or <strong>click to browse</strong></p>
             <p class="upload-hint">Supported formats: PDF, DOCX (Max size: 5MB)</p>
             <input type="file" id="resume-file-input" accept=".pdf,.docx,.doc" class="file-hidden">
@@ -396,7 +396,7 @@
 
         <!-- Tabs for Login Methods (only visible in credentials phase) -->
         <div class="login-tabs" id="login-tabs-container" style="display: none;">
-          <div class="login-tab active" id="tab-login-otp">ðŸ“± Login with OTP</div>
+          <div class="login-tab active" id="tab-login-otp">± Login with OTP</div>
           <div class="login-tab" id="tab-login-pwd">ðŸ”‘ Login with Password</div>
         </div>
 
