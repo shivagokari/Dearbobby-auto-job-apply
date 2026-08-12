@@ -1,0 +1,110 @@
+{
+  "auto_apply_settings": {
+    "delay_between_applications_seconds": [
+      30,
+      90
+    ],
+    "enabled": true,
+    "match_threshold": 60,
+    "max_applications_per_run": 5
+  },
+  "education": [
+    {
+      "degree": "Bachelor of Technology",
+      "field": "Computer Science & Engineering",
+      "grade": "8.5 CGPA",
+      "institution": "State Technical University",
+      "years": "2018-2022"
+    }
+  ],
+  "experience": {
+    "current_company": "Tech Solutions Pvt Ltd",
+    "current_ctc": "1200000",
+    "current_title": "Software Engineer",
+    "history": [
+      {
+        "company": "Tech Solutions Pvt Ltd",
+        "duration": "Jul 2022 - Present",
+        "skills_used": [
+          "Python",
+          "Django",
+          "FastAPI",
+          "React",
+          "PostgreSQL",
+          "Docker",
+          "AWS",
+          "Git"
+        ],
+        "title": "Software Engineer"
+      },
+      {
+        "company": "Startup Hub",
+        "duration": "Jan 2022 - Jun 2022",
+        "skills_used": [
+          "Python",
+          "Flask",
+          "JavaScript",
+          "MongoDB"
+        ],
+        "title": "Software Engineering Intern"
+      }
+    ],
+    "notice_period_days": 30,
+    "total_years": 3.8
+  },
+  "matcher_settings": {
+    "target_keyword_matches": 15
+  },
+  "personal": {
+    "current_city": "Hyderabad",
+    "email": "gskr070@gmail.com",
+    "full_name": "Shiva",
+    "phone": "+918142825267",
+    "relocation_willingness": false
+  },
+  "screening_answers": {
+    "earliest_joining_date": "immediately ",
+    "expected_ctc": "900000",
+    "why_interested": "",
+    "years_of_relevant_experience": "3.8"
+  },
+  "search_preferences": {
+    "exclude_keywords": [],
+    "freshness": "1_day",
+    "max_experience_years": 4,
+    "min_expected_ctc": "900000",
+    "min_experience_years": 3,
+    "target_locations": [
+      "Hyderabad",
+      "Remote"
+    ],
+    "target_titles": [
+      "Digital Marketing",
+      "Social Media Manager"
+    ]
+  },
+  "skills": {
+    "certifications": [
+      "AWS Certified Developer - Associate"
+    ],
+    "primary": [
+      "Python",
+      "Django",
+      "FastAPI",
+      "PostgreSQL",
+      "Docker",
+      "REST API",
+      "SQL",
+      "Git"
+    ],
+    "secondary": [
+      "React",
+      "JavaScript",
+      "AWS",
+      "Kubernetes",
+      "Redis",
+      "Celery",
+      "HTML/CSS"
+    ]
+  }
+}

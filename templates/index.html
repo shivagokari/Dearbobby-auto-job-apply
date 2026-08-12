@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DearBobby Automation — Dashboard</title>
+  <!-- Google Fonts for premium typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-logo">🤖</span>
+        <span class="brand-name">DearBobby</span>
+      </div>
+      
+      <nav class="nav-menu">
+        <a href="#" class="nav-item active" data-tab="overview">
+          <span class="nav-icon">📊</span> Overview
+        </a>
+        <a href="#" class="nav-item" data-tab="jobs">
+          <span class="nav-icon">💼</span> Applied Jobs
+        </a>
+        <a href="#" class="nav-item" data-tab="profile">
+          <span class="nav-icon">👤</span> Edit Profile
+        </a>
+        <a href="#" class="nav-item" data-tab="resume">
+          <span class="nav-icon">📄</span> Resume Upload
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="resume-badge" style="margin-bottom: 8px;">
+          <span>Active Resume:</span>
+          <strong id="active-resume-name" style="color: var(--color-primary);">Loading...</strong>
+        </div>
+        <div class="resume-badge" style="margin-top: 0; margin-bottom: 12px;">
+          <span>Parsed Keywords:</span>
+          <strong id="active-resume-keywords" style="color: var(--color-primary);">0 skills</strong>
+        </div>
+        <button id="btn-logout" class="btn" style="width: 100%; padding: 8px; font-size: 12px; background-color: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); color: #f87171; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 600;">🚪 Logout from Naukri</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <header class="top-header">
+        <h1 id="page-title">Dashboard Overview</h1>
+        <div class="header-actions">
+          <div class="clock-display" id="clock">00:00:00</div>
+        </div>
+      </header>
+
+      <!-- ----------------------------------------- -->
+      <!-- TAB 1: OVERVIEW -->
+      <!-- ----------------------------------------- -->
+      <section class="tab-content active" id="tab-overview">
+        <!-- Dashboard Statistics -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon pink">🔍</span>
+              <span class="stat-title">Jobs Evaluated</span>
+            </div>
+            <div class="stat-value" id="stat-total">0</div>
+            <p class="stat-desc">Total job postings scored</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon green">✅</span>
+              <span class="stat-title">Applications Sent</span>
+            </div>
+            <div class="stat-value" id="stat-applied">0</div>
+            <p class="stat-desc">Jobs matched & submitted</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon red">❌</span>
+              <span class="stat-title">Not Matched</span>
+            </div>
+            <div class="stat-value" id="stat-not-matched">0</div>
+            <p class="stat-desc">Jobs skipped or excluded</p>
+          </div>
+        </div>
+
+        <!-- Live Run Progress Bar -->
+        <div class="panel live-stats-panel" id="live-stats-bar">
+          <div class="panel-header">
+            <h3>🔴 Live Execution Status</h3>
+            <span class="live-pulse">REAL-TIME MONITORING</span>
+          </div>
+          <div class="live-stats-grid">
+            <div class="live-stat-box">
+              <span class="live-box-label">Current Evaluation Target</span>
+              <div class="live-box-value" id="live-current-job">Waiting for start...</div>
+            </div>
+            <div class="live-stat-box">
+              <span class="live-box-label">Last Match Score</span>
+              <div class="live-box-value highlight-cyan" id="live-last-score">--/100</div>
+            </div>
+            <div class="live-stat-box">
+              <span class="live-box-label">Run Evaluated</span>
+              <div class="live-box-value" id="live-run-evaluated">0</div>
+            </div>
+            <div class="live-stat-box">
+              <span class="live-box-label">Run Applied</span>
+              <div class="live-box-value highlight-green" id="live-run-applied">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls & Live Console logs -->
+        <div class="panel console-panel">
+          <div class="panel-header">
+            <h3>Execution Console</h3>
+            <div class="console-controls" style="display: flex; gap: 10px; align-items: center;">
+              <div class="freshness-select-container" style="display: flex; align-items: center; gap: 8px; background-color: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
+                <label for="dashboard-freshness" style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 0; white-space: nowrap;">📅 Postings:</label>
+                <select id="dashboard-freshness" style="background: transparent; border: none; color: var(--text-main); font-size: 12px; font-weight: 600; cursor: pointer; outline: none; padding-right: 4px;">
+                  <option value="anytime" style="background-color: #0d1527; color: var(--text-main);">Anytime</option>
+                  <option value="1_day" style="background-color: #0d1527; color: var(--text-main);">Last 24 Hours</option>
+                  <option value="3_days" style="background-color: #0d1527; color: var(--text-main);">Last 3 Days</option>
+                  <option value="7_days" style="background-color: #0d1527; color: var(--text-main);">Last Week</option>
+                  <option value="30_days" style="background-color: #0d1527; color: var(--text-main);">Last Month</option>
+                </select>
+              </div>
+              <button class="btn btn-success" id="btn-start">▶ Start Assistant</button>
+              <button class="btn btn-danger" id="btn-stop" disabled>⏹ Stop Assistant</button>
+            </div>
+          </div>
+          <div class="console-body">
+            <pre id="console-output">[SYSTEM] Ready. Click 'Start Assistant' to begin searching...</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------- -->
+      <!-- TAB 2: APPLIED JOBS LOG -->
+      <!-- ----------------------------------------- -->
+      <section class="tab-content" id="tab-jobs">
+        <div class="panel">
+          <div class="panel-header table-actions" style="flex-wrap: wrap; gap: 12px;">
+            <h3>Job Application History</h3>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <div id="status-filter-btns" style="display: flex; gap: 6px;">
+                <button class="filter-pill active" data-filter="all"    id="filter-all">All</button>
+                <button class="filter-pill"        data-filter="yes"    id="filter-applied">✅ Applied</button>
+                <button class="filter-pill"        data-filter="no"     id="filter-not-applied">❌ Not Applied</button>
+              </div>
+              <input type="text" id="log-search" class="form-input search-input" placeholder="Search company or title..." style="min-width: 200px;">
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="data-table" id="jobs-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Company</th>
+                  <th>Job Title</th>
+                  <th>Location</th>
+                  <th>Score</th>
+                  <th>Applied</th>
+                  <th>Evaluation Summary</th>
+                </tr>
+              </thead>
+              <tbody id="logs-tbody">
+                <tr>
+                  <td colspan="7" class="loading-row">Fetching log records...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------- -->
+      <!-- TAB 3: PROFILE EDITOR -->
+      <!-- ----------------------------------------- -->
+      <section class="tab-content" id="tab-profile">
+        <form id="profile-form">
+          <div class="form-grid">
+            <!-- Left Side Inputs: Personal and Preferences -->
+            <div class="form-column">
+              <div class="panel form-panel">
+                <h4>👤 Personal Details</h4>
+                <div class="form-group">
+                  <label for="p-name">Full Name</label>
+                  <input type="text" id="p-name" class="form-input" required>
+                </div>
+                <div class="form-group row-2">
+                  <div>
+                    <label for="p-email">Email</label>
+                    <input type="email" id="p-email" class="form-input" required>
+                  </div>
+                  <div>
+                    <label for="p-phone">Phone</label>
+                    <input type="text" id="p-phone" class="form-input" required>
+                  </div>
+                </div>
+                <div class="form-group row-2">
+                  <div>
+                    <label for="p-city">Current City</label>
+                    <input type="text" id="p-city" class="form-input">
+                  </div>
+                  <div class="checkbox-container toggle-container" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <input type="checkbox" id="p-relocate">
+                      <label for="p-relocate" style="margin-bottom: 0;">Willing to relocate</label>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <input type="checkbox" id="p-fresher">
+                      <label for="p-fresher" style="margin-bottom: 0; color: var(--color-primary); font-weight: 600;">I am a Fresher</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel form-panel">
+                <h4>🎯 Search Preferences</h4>
+                <div class="form-group autocomplete-wrapper">
+                  <label for="pref-titles">Target Job Titles (comma separated)</label>
+                  <input type="text" id="pref-titles" class="form-input" placeholder="e.g. Backend Developer, Software Engineer" autocomplete="off">
+                  <div class="autocomplete-suggestions" id="title-suggestions"></div>
+                </div>
+                <div class="form-group">
+                  <label for="pref-locations">Target Locations (comma separated)</label>
+                  <input type="text" id="pref-locations" class="form-input" placeholder="e.g. Bengaluru, Remote">
+                </div>
+                <div class="form-group row-2">
+                  <div>
+                    <label for="pref-minexp">Min Experience (Yrs)</label>
+                    <input type="number" id="pref-minexp" class="form-input" min="0">
+                  </div>
+                  <div>
+                    <label for="pref-maxexp">Max Experience (Yrs)</label>
+                    <input type="number" id="pref-maxexp" class="form-input" min="0">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="pref-ctc">Min Expected CTC (INR/yr)</label>
+                  <input type="text" id="pref-ctc" class="form-input" placeholder="e.g. 1500000">
+                </div>
+                <div class="form-group">
+                  <label for="pref-exclude">Exclude Keywords (comma separated)</label>
+                  <input type="text" id="pref-exclude" class="form-input" placeholder="e.g. intern, contract, support">
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Side Inputs: Settings and Screening -->
+            <div class="form-column">
+              <div class="panel form-panel">
+                <h4>⚙️ Automation & Match Settings</h4>
+                <div class="form-group row-2 align-bottom">
+                  <div class="checkbox-container toggle-container">
+                    <input type="checkbox" id="cfg-enabled">
+                    <label for="cfg-enabled"><strong>Enable Auto-Apply</strong></label>
+                  </div>
+                  <div>
+                    <label for="cfg-threshold">Match Threshold Score (0-100)</label>
+                    <input type="number" id="cfg-threshold" class="form-input" min="0" max="100" required>
+                  </div>
+                </div>
+                <div class="form-group row-2">
+                  <div>
+                    <label for="cfg-maxapps">Max Applications / Run</label>
+                    <input type="number" id="cfg-maxapps" class="form-input" min="1" required>
+                  </div>
+                  <div>
+                    <label for="cfg-keywords">Target Resume Matches</label>
+                    <input type="number" id="cfg-keywords" class="form-input" min="1" required>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="panel form-panel">
+                <h4>📝 Screening Answers (Autofill Templates)</h4>
+                <div class="form-group">
+                  <label for="qa-why">Why are you interested in this role?</label>
+                  <textarea id="qa-why" class="form-input textarea-small" rows="3"></textarea>
+                </div>
+                <div class="form-group row-2">
+                  <div>
+                    <label for="qa-ctc">Expected CTC (Text)</label>
+                    <input type="text" id="qa-ctc" class="form-input" placeholder="e.g. 15,00,000 INR">
+                  </div>
+                  <div>
+                    <label for="qa-join">Earliest Joining (Text)</label>
+                    <input type="text" id="qa-join" class="form-input" placeholder="e.g. Immediate / 30 Days">
+                  </div>
+                </div>
+                <div class="form-group row-2">
+                  <div>
+                    <label for="qa-exp">Relevant Experience (Yrs)</label>
+                    <input type="text" id="qa-exp" class="form-input" placeholder="e.g. 3.5">
+                  </div>
+                  <div>
+                    <label for="exp-total">Profile Total Experience (Yrs)</label>
+                    <input type="number" id="exp-total" class="form-input" step="0.1" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sticky/Floating Action Footer -->
+          <div class="profile-action-bar">
+            <span id="save-status-msg"></span>
+            <button type="submit" class="btn btn-primary" id="btn-save-profile">💾 Save Profile Configuration</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ----------------------------------------- -->
+      <!-- TAB 4: RESUME UPLOAD -->
+      <!-- ----------------------------------------- -->
+      <section class="tab-content" id="tab-resume">
+        <div class="panel uploader-panel">
+          <div class="uploader-header">
+            <h3>Resume Repository</h3>
+            <p>Upload your latest resume. It will be tokenized in real-time to match keywords with job descriptions.</p>
+          </div>
+
+          <div class="drag-drop-zone" id="drop-zone">
+            <span class="upload-icon">📥</span>
+            <p class="upload-text">Drag and drop your resume file here or <strong>click to browse</strong></p>
+            <p class="upload-hint">Supported formats: PDF, DOCX (Max size: 5MB)</p>
+            <input type="file" id="resume-file-input" accept=".pdf,.docx,.doc" class="file-hidden">
+          </div>
+
+          <div class="upload-progress-container" id="upload-progress-box">
+            <div class="upload-progress-info">
+              <span id="upload-filename">resume.pdf</span>
+              <span id="upload-pct">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+               <div class="progress-bar-fill" id="upload-bar"></div>
+            </div>
+            <div class="upload-status-text" id="upload-status">Ready for upload.</div>
+          </div>
+
+          <div class="active-resume-status-box" style="margin-top: 24px; text-align: center; padding: 16px; background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+            <span style="color: var(--text-muted); font-size: 13px; font-weight: 500;">Currently Active Resume:</span>
+            <strong id="upload-tab-resume-name" style="color: var(--color-primary); font-size: 14px; margin-left: 6px;">Loading...</strong>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Naukri Profile Completeness Notice Modal -->
+  <div class="modal-overlay" id="profile-notice-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-icon">💡</span>
+        <h2>Naukri Profile Completeness Notice</h2>
+      </div>
+      <div class="modal-body">
+        <p class="modal-alert-text"><strong>Crucial Recommendation for Job Seekers:</strong></p>
+        <p>Recruiter search algorithms on Naukri heavily prioritize profiles that are <strong>100% complete</strong>.</p>
+        <div class="modal-notice-box">
+          We highly recommend downloading the <strong>Naukri Mobile App</strong> and setting up your profile fully until it reaches <strong>100% completeness</strong> before running applications. This increases your shortlisting rate significantly!
+        </div>
+        <p>If you have already optimized your profile, click below to launch the auto-apply assistant.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-muted" id="btn-modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="btn-modal-confirm">Launch Assistant</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Required Modal -->
+  <div class="modal-overlay" id="login-required-modal">
+    <div class="modal-card login-card">
+      <div class="modal-header">
+        <span class="modal-icon">🔑</span>
+        <h2>Authentication Action Required</h2>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Live status spinner (shown during loading/processing) -->
+        <div id="login-spinner-block" class="spinner-container">
+          <div class="spinner"></div>
+          <span id="login-spinner-text">Waiting for browser to load Naukri login...</span>
+        </div>
+
+        <!-- Tabs for Login Methods (only visible in credentials phase) -->
+        <div class="login-tabs" id="login-tabs-container" style="display: none;">
+          <div class="login-tab active" id="tab-login-otp">📱 Login with OTP</div>
+          <div class="login-tab" id="tab-login-pwd">🔑 Login with Password</div>
+        </div>
+
+        <!-- Request OTP Form (Mobile Input) -->
+        <div id="login-mobile-block" style="display: none;">
+          <p style="margin-bottom: 12px; font-size: 13px; line-height: 1.4;">
+            Most users log in to Naukri using their registered mobile number. Enter your number below to receive an OTP:
+          </p>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" style="font-size: 12px; margin-bottom: 4px;">Registered Mobile Number</label>
+            <div style="position: relative;">
+              <span style="position: absolute; left: 12px; top: 11px; font-size: 14px; font-weight: 600; color: var(--text-muted);">+91 -</span>
+              <input type="tel" id="login-mobile" class="form-input" placeholder="Enter your 10 digit number" maxlength="10" style="padding-left: 56px; background-color: rgba(0, 0, 0, 0.3); border-color: rgba(255, 255, 255, 0.1); font-size: 15px; font-weight: 600; letter-spacing: 0.5px;">
+            </div>
+          </div>
+          <div id="login-mobile-error" style="color: #f87171; font-size: 12px; margin-bottom: 12px; font-weight: 500;"></div>
+          <button class="btn btn-primary" id="btn-submit-mobile" style="width: 100%; padding: 10px;">Get OTP</button>
+        </div>
+
+        <!-- Credentials Form (remotely fill login) -->
+        <div id="login-credentials-block" style="display: none;">
+          <p style="margin-bottom: 12px; font-size: 13px; line-height: 1.4;">
+            Please enter your Naukri login credentials below to log in from your mobile phone or browser:
+          </p>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label" style="font-size: 12px; margin-bottom: 4px;">Email ID / Username</label>
+            <input type="text" id="login-username" class="form-input" placeholder="Enter your Naukri Email" style="background-color: rgba(0, 0, 0, 0.3); border-color: rgba(255, 255, 255, 0.1);">
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" style="font-size: 12px; margin-bottom: 4px;">Password</label>
+            <input type="password" id="login-password" class="form-input" placeholder="Enter your Password" style="background-color: rgba(0, 0, 0, 0.3); border-color: rgba(255, 255, 255, 0.1);">
+          </div>
+          <div id="login-credentials-error" style="color: #f87171; font-size: 12px; margin-bottom: 12px; font-weight: 500;"></div>
+          <button class="btn btn-primary" id="btn-submit-credentials" style="width: 100%; padding: 10px;">Submit Login</button>
+        </div>
+
+        <!-- OTP Verification Code Form -->
+        <div id="login-otp-block" style="display: none;">
+          <p style="margin-bottom: 12px; font-size: 13px; line-height: 1.4;">
+            Naukri requires verification. Please enter the verification code (OTP) sent to your mobile/email:
+          </p>
+          <div style="text-align: center; margin-bottom: 16px; background: rgba(0, 0, 0, 0.2); padding: 8px; border-radius: 8px;">
+            <img id="login-otp-screenshot" src="" alt="Verification Screen" style="max-width: 100%; max-height: 160px; border-radius: 4px; border: 1px solid var(--border-color); display: none; margin: 0 auto;">
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" style="font-size: 12px; margin-bottom: 4px;">Verification Code (OTP)</label>
+            <input type="text" id="login-otp-code" class="form-input" placeholder="Enter OTP code" style="text-align: center; font-size: 16px; letter-spacing: 2px; font-weight: bold; background-color: rgba(0, 0, 0, 0.3); border-color: rgba(255, 255, 255, 0.1);">
+          </div>
+          <div id="login-otp-error" style="color: #f87171; font-size: 12px; margin-bottom: 12px; font-weight: 500;"></div>
+          <button class="btn btn-primary" id="btn-submit-otp" style="width: 100%; padding: 10px;">Verify & Login</button>
+        </div>
+
+        <!-- Cookie Bypass Block -->
+        <div style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <p style="font-weight: 500; font-size: 13px; color: var(--text-main); margin-bottom: 8px;">💡 Bypass Option: Import Session Cookies</p>
+          <p style="font-size: 12px; margin-bottom: 12px; line-height: 1.4;">If the separate browser window is blocked or not visible, you can import cookies directly from your current browser:</p>
+          <ol style="font-size: 12px; margin-left: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; line-height: 1.4;">
+            <li>Install a browser extension (e.g. <strong>Cookie-Editor</strong>).</li>
+            <li>Go to Naukri.com, log in, click the extension icon, and click <strong>Export (JSON)</strong>.</li>
+            <li>Paste the copied JSON text inside the box below:</li>
+          </ol>
+          <textarea id="cookie-json-input" class="form-input" placeholder='Paste Cookie JSON array here...' rows="3" style="font-family: var(--font-mono); font-size: 11px; background-color: rgba(0, 0, 0, 0.3); border-color: rgba(255, 255, 255, 0.1);"></textarea>
+          <button class="btn btn-primary" id="btn-import-cookies" style="margin-top: 8px; width: 100%; padding: 8px 12px; font-size: 12px;">Import Cookies & Restart Runner</button>
+          <span id="cookie-import-status" style="font-size: 11px; margin-top: 6px; display: block; text-align: center;"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Completion Summary -->
+  <div class="modal-overlay" id="completion-modal">
+    <div class="modal-card" style="max-width: 450px;">
+      <div class="modal-header">
+        <span class="modal-icon">🎉</span>
+        <h2>Run Completed</h2>
+      </div>
+      <div class="modal-body" style="padding-top: 10px;">
+        <p style="font-size: 14px; line-height: 1.5; color: var(--text-main); margin-bottom: 16px;">
+          Applications are completed as per your resume and matching.
+        </p>
+        
+        <div style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px;">
+            <span style="color: var(--text-muted); font-weight: 500;">Mismatched Jobs:</span>
+            <strong id="summary-mismatch-count" style="color: var(--color-danger); font-size: 16px;">0</strong>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px;">
+            <span style="color: var(--text-muted); font-weight: 500;">Most Common Excluded Point:</span>
+            <strong id="summary-top-reason" style="color: var(--text-main); font-weight: 600; line-height: 1.4;">None</strong>
+          </div>
+        </div>
+        
+        <div id="summary-resume-warning" style="display: none; margin-bottom: 20px; background-color: rgba(239, 68, 68, 0.1); border-left: 3px solid var(--color-danger); padding: 10px 12px; border-radius: 4px;">
+          <p style="color: var(--color-danger); font-size: 12px; font-weight: 600; margin: 0;">
+            Note: Try to Change/Modify Resume
+          </p>
+        </div>
+        
+        <div style="display: flex; justify-content: flex-end;">
+          <button class="btn btn-primary" id="btn-completion-ok" style="min-width: 90px; padding: 8px 16px;">Okay</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/main.js"></script>
+</body>
+</html>

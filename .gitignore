@@ -1,0 +1,41 @@
+﻿# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# Session / credentials (NEVER commit these)
+naukri_session.json
+login_handshake.json
+*.json.bak
+
+# Resume files (personal data)
+*.pdf
+*.docx
+*.doc
+
+# Application logs (personal data)
+applied_log.csv
+*.log
+logs/
+
+# Playwright browsers
+playwright-browsers/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
