@@ -1,7 +1,9 @@
 [build]
   publish = "dist"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"
+    Pragma = "no-cache"
+    Expires = "0"
