@@ -5,6 +5,7 @@ let statusInterval = null;
 let allLogs = [];
 let resumeKeywords = [];
 let runStartTime = null;
+let currentResumeName = '';
 
 const STANDARD_TITLES = [
   "Python Developer", "Backend Developer", "Frontend Developer", "Full Stack Engineer",
@@ -71,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCookieImporter();
   initLoginRemoteControls();
   initLogout();
+  initOnboarding();
   
   // Dashboard portal change listener
   const dbPortal = document.getElementById('dashboard-portal');
@@ -292,11 +294,13 @@ function checkRunnerStatus() {
       }
       
       // Update active resume
-      activeResumeName.textContent = data.resume || "None (Drop resume)";
+      currentResumeName = data.resume || "None (Drop resume)";
+      activeResumeName.textContent = currentResumeName;
       const tabResume = document.getElementById('upload-tab-resume-name');
       if (tabResume) {
-        tabResume.textContent = data.resume || "None (Upload resume to begin)";
+        tabResume.textContent = currentResumeName;
       }
+      checkOnboardingStatus();
     })
     .catch(err => {
       console.warn("Status poll failed:", err);
@@ -1211,8 +1215,65 @@ function initLogout() {
             btnLogout.disabled = false;
             btnLogout.textContent = "🚪 Logout from Naukri";
           });
-      }
+// Onboarding Setup Check and Navigation
+function initOnboarding() {
+  const btnResume = document.getElementById('btn-onboard-resume');
+  const btnProfile = document.getElementById('btn-onboard-profile');
+
+  if (btnResume) {
+    btnResume.addEventListener('click', () => {
+      document.querySelector('.nav-item[data-tab="resume"]').click();
     });
+  }
+
+  if (btnProfile) {
+    btnProfile.addEventListener('click', () => {
+      document.querySelector('.nav-item[data-tab="profile"]').click();
+    });
+  }
+}
+
+function checkOnboardingStatus() {
+  const banner = document.getElementById('onboarding-banner');
+  const titleEl = document.getElementById('onboarding-status-title');
+  const descEl = document.getElementById('onboarding-status-desc');
+  const btnResume = document.getElementById('btn-onboard-resume');
+  const btnProfile = document.getElementById('btn-onboard-profile');
+
+  if (!banner || !titleEl || !descEl) return;
+
+  const hasResume = currentResumeName && !currentResumeName.toLowerCase().includes('none') && !currentResumeName.toLowerCase().includes('loading');
+  const hasProfile = profileData && profileData.personal && profileData.personal.full_name && profileData.personal.full_name.trim().length > 0;
+  const hasTitles = profileData && profileData.search_preferences && profileData.search_preferences.target_titles && profileData.search_preferences.target_titles.length > 0;
+
+  if (!hasResume) {
+    titleEl.textContent = 'Step 1 of 2: Upload Your Resume';
+    titleEl.style.color = '#f87171';
+    descEl.textContent = 'No active resume detected. Upload your resume (PDF or DOCX) in the Resume Upload tab so the AI can extract your skill keywords.';
+    btnResume.style.borderColor = '#f87171';
+    btnResume.style.color = '#f87171';
+    btnResume.textContent = '1. Upload Resume';
+  } else if (!hasProfile || !hasTitles) {
+    titleEl.textContent = 'Step 2 of 2: Complete Profile Details';
+    titleEl.style.color = '#fbbf24';
+    descEl.textContent = 'Resume loaded! Next, go to Edit Profile to verify your full name, phone number, and target job titles.';
+    btnResume.style.borderColor = 'var(--color-success)';
+    btnResume.style.color = 'var(--color-success)';
+    btnResume.textContent = '✓ Resume Uploaded';
+    btnProfile.style.borderColor = '#fbbf24';
+    btnProfile.style.color = '#fbbf24';
+  } else {
+    titleEl.textContent = 'System Ready — Ready to Apply!';
+    titleEl.style.color = 'var(--color-success)';
+    descEl.textContent = `Resume loaded (${currentResumeName}) and profile details configured. Select your target portal and click "Start Assistant"!`;
+    banner.style.borderColor = 'rgba(34, 197, 94, 0.4)';
+    banner.style.background = 'linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(16, 185, 129, 0.03) 100%)';
+    btnResume.style.borderColor = 'var(--color-success)';
+    btnResume.style.color = 'var(--color-success)';
+    btnResume.textContent = '✓ Resume Ready';
+    btnProfile.style.borderColor = 'var(--color-success)';
+    btnProfile.style.color = 'var(--color-success)';
+    btnProfile.textContent = '✓ Profile Ready';
   }
 }
 
