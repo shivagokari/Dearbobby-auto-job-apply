@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLoginRemoteControls();
   initLogout();
   initOnboarding();
+  initMobileAppDrawer();
   
   // Dashboard portal change listener
   const dbPortal = document.getElementById('dashboard-portal');
@@ -1281,4 +1282,37 @@ function checkOnboardingStatus() {
     btnProfile.textContent = '✓ Profile Ready';
   }
 }
+
+// Mobile App Drawer Controller
+function initMobileAppDrawer() {
+  const toggleBtn = document.getElementById('mobile-menu-toggle');
+  const closeBtn = document.getElementById('sidebar-close-btn');
+  const sidebar = document.querySelector('.sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  function openDrawer() {
+    if (sidebar) sidebar.classList.add('open');
+    if (backdrop) backdrop.classList.add('active');
+  }
+
+  function closeDrawer() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('active');
+  }
+
+  if (toggleBtn) toggleBtn.addEventListener('click', openDrawer);
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+  // Close drawer automatically when any tab option is tapped on mobile
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        closeDrawer();
+      }
+    });
+  });
+}
+
 
