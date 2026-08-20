@@ -1213,8 +1213,13 @@ function initLogout() {
           .catch(err => {
             alert("Logout failed: " + err);
             btnLogout.disabled = false;
-            btnLogout.textContent = "🚪 Logout from Naukri";
+            btnLogout.textContent = "Logout from Naukri";
           });
+      }
+    });
+  }
+}
+
 // Onboarding Setup Check and Navigation
 function initOnboarding() {
   const btnResume = document.getElementById('btn-onboard-resume');
