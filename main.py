@@ -3,7 +3,7 @@ import json
 import sys
 import logging
 from resume_parser import parse_resume
-from portals import naukri
+from portals import naukri, indeed, foundit
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -53,9 +53,31 @@ def main():
         logger.error(f"Failed to parse resume: {e}")
         sys.exit(1)
         
-    # 3. Trigger automation portal
+    # 3. Trigger automation portals
     try:
-        naukri.run(profile, resume_keywords)
+        active_portals = profile.get("search_preferences", {}).get("portals", ["naukri"])
+        if isinstance(active_portals, str):
+            active_portals = [active_portals]
+            
+        if "all" in active_portals:
+            active_portals = ["naukri", "indeed", "foundit"]
+            
+        logger.info(f"Active portals selected for this run: {', '.join(active_portals)}")
+        
+        for portal_name in active_portals:
+            p_name = portal_name.lower().strip()
+            if p_name == "naukri":
+                logger.info(">>> Starting Naukri.com automation run...")
+                naukri.run(profile, resume_keywords)
+            elif p_name == "indeed":
+                logger.info(">>> Starting Indeed India automation run...")
+                indeed.run(profile, resume_keywords)
+            elif p_name == "foundit":
+                logger.info(">>> Starting Foundit India automation run...")
+                foundit.run(profile, resume_keywords)
+            else:
+                logger.warning(f"Unrecognized portal '{portal_name}'. Skipping.")
+
     except KeyboardInterrupt:
         logger.info("Process interrupted by user. Exiting gracefully.")
     except Exception as e:

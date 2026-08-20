@@ -72,6 +72,22 @@ document.addEventListener('DOMContentLoaded', () => {
   initLoginRemoteControls();
   initLogout();
   
+  // Dashboard portal change listener
+  const dbPortal = document.getElementById('dashboard-portal');
+  if (dbPortal) {
+    dbPortal.addEventListener('change', (e) => {
+      if (profileData && profileData.search_preferences) {
+        const val = e.target.value;
+        profileData.search_preferences.portals = val === 'all' ? ['naukri', 'indeed', 'foundit'] : [val];
+        fetch('/api/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(profileData)
+        });
+      }
+    });
+  }
+
   // Dashboard freshness change listener
   const dbFreshness = document.getElementById('dashboard-freshness');
   if (dbFreshness) {
@@ -364,6 +380,9 @@ function renderLogsTable(logs) {
     // Split reasons by pipe
     const reasonsList = row.reasons.split('|').map(r => `<li>${r.trim()}</li>`).join('');
     
+    // Portal badge
+    const portalName = row.portal || 'Naukri';
+
     html += `
       <tr>
         <td style="white-space: nowrap;">${timeStr}</td>
@@ -372,6 +391,7 @@ function renderLogsTable(logs) {
         <td>${escapeHTML(row.location || 'N/A')}</td>
         <td><span class="${scoreClass}">${scoreVal}/100</span></td>
         <td><span class="${appliedClass}">${row.applied}</span></td>
+        <td><span class="badge" style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); color: var(--color-primary);">${escapeHTML(portalName)}</span></td>
         <td>
           <ul style="margin-left: 14px; padding-left: 4px; font-size: 12px; color: var(--text-muted);">
             ${reasonsList}
