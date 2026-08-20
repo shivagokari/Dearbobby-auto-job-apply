@@ -1,6 +1,6 @@
-redirectsOrigin = "config"
+headersOrigin = "config"
 plugins = []
-headers = []
+redirects = []
 
 [functions]
 
@@ -24,14 +24,10 @@ publishOrigin = "config"
 
 [build.services]
 
-[[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200.0
-force = false
+[[headers]]
+for = "/*"
 
-[redirects.query]
-
-[redirects.conditions]
-
-[redirects.headers]
+[headers.values]
+Cache-Control = "no-cache, no-store, must-revalidate, max-age=0"
+Pragma = "no-cache"
+Expires = "0"
