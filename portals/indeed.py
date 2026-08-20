@@ -85,6 +85,7 @@ def handle_screening_questions(page: Page, profile: dict, resume_keywords: set):
         labels = page.locator("label, legend, fieldset label").all()
         answers = profile.get("screening_answers", {})
         experience = profile.get("experience", {})
+        is_fresher = experience.get("is_fresher", False)
         
         for label_loc in labels:
             try:
@@ -105,39 +106,63 @@ def handle_screening_questions(page: Page, profile: dict, resume_keywords: set):
                         matched_skill = skill
                         break
 
-                radios = parent.locator("input[type='radio']").all()
-                if radios and len(radios) >= 2:
-                    target_match = "yes" if has_skill else "no"
-                    clicked = False
-                    for radio in radios:
-                        r_val = radio.get_attribute("value") or ""
-                        r_id = radio.get_attribute("id") or ""
-                        if target_match in r_val.lower() or target_match in r_id.lower():
-                            radio.click()
-                            clicked = True
-                            break
-                    if not clicked:
-                        radios[0].click()
+                # 1. Why Interested
+                if "interested" in label_text or "why this role" in label_text or "cover letter" in label_text:
+                    val = str(answers.get("why_interested", "")) or f"I am passionate about this role and have hands-on experience with {matched_skill.title()}."
+                    input_field.fill(val)
 
-                elif input_field.element_handle().as_element().tag_name == "select":
-                    options = input_field.locator("option").all()
-                    target_match = "yes" if has_skill else "no"
-                    matched_opt = None
-                    for opt in options:
-                        if target_match in opt.inner_text().lower():
-                            matched_opt = opt.get_attribute("value")
-                            break
-                    if matched_opt:
-                        input_field.select_option(matched_opt)
-                    elif len(options) > 1:
-                        input_field.select_option(index=1)
-
-                elif input_field.element_handle().as_element().tag_name in ["input", "textarea"]:
-                    if any(term in label_text for term in ["year", "experience", "how many"]):
-                        val = str(round(experience.get("total_years", 3.0))) if has_skill else "0"
+                # 2. Expected CTC
+                elif "expected" in label_text and ("ctc" in label_text or "salary" in label_text):
+                    val = str(answers.get("expected_ctc", "")) or ("As per company standards" if is_fresher else "")
+                    if val:
                         input_field.fill(val)
-                    else:
-                        val = f"Yes, I have hands-on experience with {matched_skill.title()}." if has_skill else "No, but I am a fast learner."
+
+                # 3. Current CTC
+                elif "current" in label_text and ("ctc" in label_text or "salary" in label_text):
+                    val = "0 (Fresher)" if is_fresher else (str(answers.get("current_ctc", "")) or str(experience.get("current_ctc", "")))
+                    if val:
+                        input_field.fill(val)
+
+                # 4. Notice Period / Joining
+                elif "notice" in label_text or "joining" in label_text or "earliest" in label_text:
+                    val = str(answers.get("earliest_joining_date", "Immediate"))
+                    input_field.fill(val)
+
+                # 5. Experience
+                elif "experience" in label_text or "years" in label_text:
+                    val = "0" if is_fresher else (str(answers.get("years_of_relevant_experience", "")) or str(round(experience.get("total_years", 3.0))))
+                    input_field.fill(val)
+
+                else:
+                    radios = parent.locator("input[type='radio']").all()
+                    if radios and len(radios) >= 2:
+                        target_match = "yes" if has_skill else "no"
+                        clicked = False
+                        for radio in radios:
+                            r_val = radio.get_attribute("value") or ""
+                            r_id = radio.get_attribute("id") or ""
+                            if target_match in r_val.lower() or target_match in r_id.lower():
+                                radio.click()
+                                clicked = True
+                                break
+                        if not clicked:
+                            radios[0].click()
+
+                    elif input_field.element_handle().as_element().tag_name == "select":
+                        options = input_field.locator("option").all()
+                        target_match = "yes" if has_skill else "no"
+                        matched_opt = None
+                        for opt in options:
+                            if target_match in opt.inner_text().lower():
+                                matched_opt = opt.get_attribute("value")
+                                break
+                        if matched_opt:
+                            input_field.select_option(matched_opt)
+                        elif len(options) > 1:
+                            input_field.select_option(index=1)
+
+                    elif input_field.element_handle().as_element().tag_name in ["input", "textarea"]:
+                        val = f"Yes, I have experience with {matched_skill.title()}." if has_skill else "No, but I am a fast learner."
                         input_field.fill(val)
             except Exception:
                 pass

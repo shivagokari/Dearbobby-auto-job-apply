@@ -497,6 +497,9 @@ function loadProfile() {
       const fresherCb = document.getElementById('p-fresher');
       if (fresherCb) {
         fresherCb.checked = !!data.experience.is_fresher;
+        fresherCb.removeEventListener('change', toggleFresherFields);
+        fresherCb.addEventListener('change', toggleFresherFields);
+        toggleFresherFields();
       }
       
       // Populate Experience fields
@@ -526,6 +529,7 @@ function loadProfile() {
       
       // Populate Screening templates fields
       document.getElementById('qa-why').value = data.screening_answers.why_interested || '';
+      document.getElementById('qa-current-ctc').value = data.screening_answers.current_ctc || (data.experience.is_fresher ? '0 (Fresher)' : '');
       document.getElementById('qa-ctc').value = data.screening_answers.expected_ctc || '';
       document.getElementById('qa-join').value = data.screening_answers.earliest_joining_date || '';
       document.getElementById('qa-exp').value = data.screening_answers.years_of_relevant_experience || '';
@@ -533,6 +537,38 @@ function loadProfile() {
     .catch(err => {
       console.error("Failed to load profile:", err);
     });
+}
+
+function toggleFresherFields() {
+  const isFresher = document.getElementById('p-fresher').checked;
+  const expContainer = document.getElementById('fresher-exp-container');
+  const ctcContainer = document.getElementById('fresher-ctc-container');
+  const qaSalaryContainer = document.getElementById('fresher-qa-salary-container');
+  const qaExpBox = document.getElementById('fresher-qa-exp-box');
+  const totalExpContainer = document.getElementById('fresher-totalexp-container');
+  const noticeBadge = document.getElementById('fresher-notice-badge');
+
+  if (isFresher) {
+    if (expContainer) expContainer.style.display = 'none';
+    if (ctcContainer) ctcContainer.style.display = 'none';
+    if (qaSalaryContainer) qaSalaryContainer.style.display = 'none';
+    if (qaExpBox) qaExpBox.style.display = 'none';
+    if (totalExpContainer) totalExpContainer.style.display = 'none';
+    if (noticeBadge) noticeBadge.style.display = 'block';
+
+    document.getElementById('pref-minexp').value = 0;
+    document.getElementById('pref-maxexp').value = 1;
+    document.getElementById('exp-total').value = 0;
+    document.getElementById('qa-exp').value = '0';
+    document.getElementById('qa-current-ctc').value = '0 (Fresher)';
+  } else {
+    if (expContainer) expContainer.style.display = 'grid';
+    if (ctcContainer) ctcContainer.style.display = 'block';
+    if (qaSalaryContainer) qaSalaryContainer.style.display = 'grid';
+    if (qaExpBox) qaExpBox.style.display = 'block';
+    if (totalExpContainer) totalExpContainer.style.display = 'block';
+    if (noticeBadge) noticeBadge.style.display = 'none';
+  }
 }
 
 profileForm.addEventListener('submit', (e) => {
@@ -581,6 +617,7 @@ profileForm.addEventListener('submit', (e) => {
   profileData.auto_apply_settings.delay_between_applications_seconds = [15, 30];
   
   profileData.screening_answers.why_interested = document.getElementById('qa-why').value;
+  profileData.screening_answers.current_ctc = document.getElementById('qa-current-ctc').value;
   profileData.screening_answers.expected_ctc = document.getElementById('qa-ctc').value;
   profileData.screening_answers.earliest_joining_date = document.getElementById('qa-join').value;
   profileData.screening_answers.years_of_relevant_experience = document.getElementById('qa-exp').value;

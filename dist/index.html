@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="static/style.css?v=5.0">
+  <link rel="stylesheet" href="static/style.css?v=6.0">
 </head>
 <body>
 
@@ -214,7 +214,7 @@
                   <th>Portal</th>
                   <th>Evaluation Summary</th>
                 </tr>
-              </thead>  </thead>
+              </thead>
               <tbody id="logs-tbody">
                 <tr>
                   <td colspan="7" class="loading-row">Fetching log records...</td>
@@ -278,7 +278,9 @@
                   <label for="pref-locations">Target Locations (comma separated)</label>
                   <input type="text" id="pref-locations" class="form-input" placeholder="e.g. Bengaluru, Remote">
                 </div>
-                <div class="form-group row-2">
+
+                <!-- Experience Fields (Hidden when Fresher is checked) -->
+                <div id="fresher-exp-container" class="form-group row-2">
                   <div>
                     <label for="pref-minexp">Min Experience (Yrs)</label>
                     <input type="number" id="pref-minexp" class="form-input" min="0">
@@ -288,10 +290,18 @@
                     <input type="number" id="pref-maxexp" class="form-input" min="0">
                   </div>
                 </div>
-                <div class="form-group">
+
+                <!-- Salary Field (Hidden when Fresher is checked) -->
+                <div id="fresher-ctc-container" class="form-group">
                   <label for="pref-ctc">Min Expected CTC (INR/yr)</label>
                   <input type="text" id="pref-ctc" class="form-input" placeholder="e.g. 1500000">
                 </div>
+
+                <!-- Fresher Active Badge -->
+                <div id="fresher-notice-badge" style="display: none; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: var(--color-primary); font-weight: 600;">
+                  🎓 Fresher Mode Active — Target Experience set to 0–1 Years. Min CTC & Experience requirements disabled.
+                </div>
+
                 <div class="form-group">
                   <label for="pref-exclude">Exclude Keywords (comma separated)</label>
                   <input type="text" id="pref-exclude" class="form-input" placeholder="e.g. intern, contract, support">
@@ -330,27 +340,34 @@
                 <h4>📝 Screening Answers (Autofill Templates)</h4>
                 <div class="form-group">
                   <label for="qa-why">Why are you interested in this role?</label>
-                  <textarea id="qa-why" class="form-input textarea-small" rows="3"></textarea>
+                  <textarea id="qa-why" class="form-input textarea-small" rows="3" placeholder="e.g. I am passionate about building scalable solutions and eager to contribute my technical skills..."></textarea>
                 </div>
-                <div class="form-group row-2">
+
+                <div id="fresher-qa-salary-container" class="form-group row-2">
+                  <div>
+                    <label for="qa-current-ctc">Current CTC (Text)</label>
+                    <input type="text" id="qa-current-ctc" class="form-input" placeholder="e.g. 0 (Fresher) or 10,00,000 INR">
+                  </div>
                   <div>
                     <label for="qa-ctc">Expected CTC (Text)</label>
                     <input type="text" id="qa-ctc" class="form-input" placeholder="e.g. 15,00,000 INR">
                   </div>
+                </div>
+
+                <div class="form-group row-2">
                   <div>
                     <label for="qa-join">Earliest Joining (Text)</label>
                     <input type="text" id="qa-join" class="form-input" placeholder="e.g. Immediate / 30 Days">
                   </div>
-                </div>
-                <div class="form-group row-2">
-                  <div>
+                  <div id="fresher-qa-exp-box">
                     <label for="qa-exp">Relevant Experience (Yrs)</label>
                     <input type="text" id="qa-exp" class="form-input" placeholder="e.g. 3.5">
                   </div>
-                  <div>
-                    <label for="exp-total">Profile Total Experience (Yrs)</label>
-                    <input type="number" id="exp-total" class="form-input" step="0.1" required>
-                  </div>
+                </div>
+
+                <div id="fresher-totalexp-container" class="form-group">
+                  <label for="exp-total">Profile Total Experience (Yrs)</label>
+                  <input type="number" id="exp-total" class="form-input" step="0.1" min="0">
                 </div>
               </div>
             </div>
@@ -547,6 +564,6 @@
     </div>
   </div>
 
-  <script src="static/main.js?v=5.0"></script>
+  <script src="static/main.js?v=6.0"></script>
 </body>
 </html>

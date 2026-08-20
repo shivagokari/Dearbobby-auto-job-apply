@@ -531,21 +531,24 @@ def _handle_screening_questions(page: Page, job: dict, profile: dict, resume_key
                     
                 # 2. Expected CTC
                 elif "expected" in label_text and ("ctc" in label_text or "salary" in label_text):
-                    val = str(answers.get("expected_ctc", ""))
+                    is_fresher = profile.get("experience", {}).get("is_fresher", False)
+                    val = str(answers.get("expected_ctc", "")) or ("As per company standards" if is_fresher else "")
                     if val:
                         input_field.fill(val)
                         logger.info(f"Filled Expected CTC for question: '{label_text.strip()}'")
                         
                 # 3. Current CTC
                 elif "current" in label_text and ("ctc" in label_text or "salary" in label_text):
-                    val = str(experience.get("current_ctc", ""))
+                    is_fresher = profile.get("experience", {}).get("is_fresher", False)
+                    val = "0 (Fresher)" if is_fresher else (str(answers.get("current_ctc", "")) or str(experience.get("current_ctc", "")))
                     if val:
                         input_field.fill(val)
                         logger.info(f"Filled Current CTC for question: '{label_text.strip()}'")
                         
                 # 4. Years of experience
                 elif "experience" in label_text or "relevant" in label_text:
-                    val = str(answers.get("years_of_relevant_experience", ""))
+                    is_fresher = profile.get("experience", {}).get("is_fresher", False)
+                    val = "0" if is_fresher else str(answers.get("years_of_relevant_experience", ""))
                     if val:
                         input_field.fill(val)
                         logger.info(f"Filled Experience for question: '{label_text.strip()}'")
